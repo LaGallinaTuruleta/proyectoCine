@@ -101,7 +101,7 @@ public class Horas {
 		gbc_btnNewButton_3.gridy = 2;
 		//gbc_btnNewButton_3.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Blanes-PC\\Documents\\MEGA\\1DAW\\PROGRAMACIÓN\\3EVALUACION\\jacki.jpg")));
 		panel.add(btnNewButton_3, gbc_btnNewButton_3);
-		
+		//
 		JButton btnNewButton_6 = new JButton("Hora 2");
 		GridBagConstraints gbc_btnNewButton_6 = new GridBagConstraints();
 		gbc_btnNewButton_6.insets = new Insets(0, 0, 5, 5);
