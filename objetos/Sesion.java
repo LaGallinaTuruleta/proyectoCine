@@ -1,10 +1,31 @@
 package abril18.proyectoCine.objetos;
 
 public class Sesion {
-	private int cod;
-	private Pelicula p;
-	private Butaca[] butacas;
+	private int codSes;
+	private int codPel;
+	private int codSala;
 	private String hora;
+
+	public Sesion() {
+		this.codSes = 0;
+		this.codPel = 0;
+		this.codSala = 0;
+		this.hora = "";
+	}
+
+	public Sesion(int codSes, int codPel, int codSala, String hora) {
+		this.codSes = codSes;
+		this.codPel = codPel;
+		this.codSala = codSala;
+		this.hora = hora;
+	}
+
+	public Sesion(int codPel, int codSala, String hora) {
+		this.codSes = 0;
+		this.codPel = codPel;
+		this.codSala = codSala;
+		this.hora = hora;
+	}
 
 	public String getHora() {
 		return hora;
@@ -14,34 +35,33 @@ public class Sesion {
 		this.hora = hora;
 	}
 
-	public int getCod() {
-		return cod;
+	public int getCodSes() {
+		return codSes;
 	}
 
-	public void setCod(int cod) {
-		this.cod = cod;
+	public void setCodSes(int codSes) {
+		this.codSes = codSes;
 	}
 
-	public Pelicula getP() {
-		return p;
+	public int getCodPel() {
+		return codPel;
 	}
 
-	public void setP(Pelicula p) {
-		this.p = p;
+	public void setCodPel(int codPel) {
+		this.codPel = codPel;
 	}
 
-	public Butaca[] getButacas() {
-		return butacas;
-	}
-	public String getButacasBBDD() {
-		String butacasBBDD="";
-		
-		return butacasBBDD;
+	public int getCodSala() {
+		return codSala;
 	}
 
+	public void setCodSala(int codSala) {
+		this.codSala = codSala;
+	}
 
-	public void setButacas(Butaca[] butacas) {
-		this.butacas = butacas;
+	@Override
+	public String toString() {
+		return "Sesion [cod=" + codSes + ", p=" + codPel + ", s=" + codSala + ", hora=" + hora + "]";
 	}
 
 }
