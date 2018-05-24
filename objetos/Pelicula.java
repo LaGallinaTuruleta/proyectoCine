@@ -58,4 +58,13 @@ public class Pelicula {
 		return "Pelicula [cod=" + cod + ", nombre=" + nombre + ", rutaFoto=" + rutaFoto + "]";
 	}
 
+	public int compareTo(Pelicula p) {
+		int resultado = -1;
+		if ((Integer.toString(this.getCod()).equals(Integer.toString(p.getCod()))) && this.getNombre().equals(p.getNombre())
+				&& this.getRutaFoto().equals(p.getRutaFoto())) {
+			resultado = 0;
+		}
+		return resultado;
+	}
+
 }

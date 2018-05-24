@@ -42,11 +42,27 @@ public class BBDD {
 				stmt.setInt(3, sesion.getCodSala());
 				stmt.setString(4, sesion.getHora());
 				stmt.executeUpdate();
+
+				Butaca[] butacas = sesion.getButacas();
+				for (int i = 0; i < butacas.length; i++) {
+					stmt = con.prepareStatement("INSERT INTO BUTACAS VALUES(?,?,?,?)");
+					stmt.setInt(1, butacas[i].getCodB());
+					stmt.setInt(2, butacas[i].getFila());
+					stmt.setInt(3, butacas[i].getAsiento());
+					stmt.setBoolean(4, butacas[i].isOcupado());
+					stmt.executeUpdate();
+					stmt = con.prepareStatement("INSERT INTO rel_butacas_sesiones VALUES(?,?)");
+					stmt.setInt(1, sesion.getCodSes());
+					stmt.setInt(2, i);
+					stmt.executeUpdate();
+				}
+
 				// Esto de abajo se supone que es lo mismo pero no funciona :D
 				//stmt = con.prepareStatement(
 				//		"INSERT INTO SESIONES VALUES(" + sesion.getCod() + "," + sesion.getP().getNombre() + ","
 				//				+ sesion.getS().getButacasBBDD() + "," + sesion.getHora() + ");");
 				//stmt.executeUpdate();
+
 			} catch (SQLException io) {
 				System.out.println("Peta a la hora de guardar las sessiones en la base de datos");
 				System.out.println(io.toString());
@@ -56,7 +72,7 @@ public class BBDD {
 	}
 
 	public void guardarSalasEnBBDD(ArrayList<Sala> salas) {
-		int x = 0;
+
 		try {
 			Class.forName(eDriver).newInstance();
 			con = DriverManager.getConnection(eURL, "root", "");
@@ -72,21 +88,6 @@ public class BBDD {
 				stmt.setInt(3, sala.getFilas());
 				stmt.setInt(4, sala.getNumAsientosXFila());
 				stmt.executeUpdate();
-
-				Butaca[] butacas = sala.getButacas();
-				for (int i = 0; i < butacas.length; i++) {
-					stmt = con.prepareStatement("INSERT INTO BUTACAS VALUES(?,?,?,?)");
-					stmt.setInt(1, butacas[i].getCodB());
-					stmt.setInt(2, butacas[i].getFila());
-					stmt.setInt(3, butacas[i].getAsiento());
-					stmt.setBoolean(4, butacas[i].isOcupado());
-					stmt.executeUpdate();
-					stmt = con.prepareStatement("INSERT INTO rel_butacas_salas VALUES(?,?)");
-					stmt.setInt(1, sala.getCodSala());
-					stmt.setInt(2, x);
-					stmt.executeUpdate();
-					x++;
-				}
 
 			} catch (SQLException io) {
 				System.out.println("Peta a la hora de guardar las salas en la base de datos");
@@ -152,20 +153,36 @@ public class BBDD {
 			con = DriverManager.getConnection(eURL, "root", "");
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println("Peta en la conexión de acceso a la BBDD desde extraerSesionesDeBBDD");
 		}
 
 		try {
-			stmt = con.prepareStatement("SELECT * FROM SESIONES");
-			ResultSet rs = stmt.executeQuery();
-
+			PreparedStatement stmtse = con.prepareStatement("SELECT * FROM SESIONES");
+			ResultSet rsse = stmtse.executeQuery();
+			
+			
 			//error llega al maximo
-			while (rs.next()) {
-				sesiones.add(new Sesion(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4)));
+			while (rsse.next()) {
+				PreparedStatement stmtsa = con.prepareStatement("SELECT * FROM rel_butacas_sesiones WHERE COD_SESION='"+rsse.getInt(1)+"%'")
+						ResultSet rssa = stmtsa.executeQuery();;
+				while (rssa.next()) {
+
+					PreparedStatement stmtbu = con.prepareStatement("SELECT * FROM BUTACAS WHERE COD_BUTACA ='" + rs.getInt(1) + "%'");
+					ResultSet rsb = stmt.executeQuery();
+					Butaca[] butacas = new Butaca[rs.getInt(3) * rs.getInt(4)];
+					int i = 0;
+					while (rsb.next()) {
+						butacas[i] = new Butaca(rsb.getInt(1), rsb.getInt(2), rsb.getInt(3), rsb.getBoolean(4));
+					}
+				
+				sesiones.add(new Sesion(rsse.getInt(1), rsse.getInt(2),
+						new Sala(rssa.getInt(1), rssa.getInt(2), rssa.getInt(3), rssa.getInt(4)), rsse.getString(4)));
 			}
 
 		} catch (Exception e) {
 			System.out.println("Peta a la hora de extraer las sesiones de la base de datos");
 			System.out.println(e.toString());
+			e.printStackTrace();
 			// TODO: handle exception
 		}
 		return sesiones;
@@ -182,26 +199,11 @@ public class BBDD {
 
 		try {
 			stmt = con.prepareStatement("SELECT * FROM SALAS");
-
 			ResultSet rs = stmt.executeQuery();
-
-			//error llega al maximo
-			while (rs.next()) {
-
-				stmt = con.prepareStatement("SELECT * FROM BUTACAS WHERE COD_BUTACA ='" + rs.getInt(1) + "%'");
-				ResultSet rsb = stmt.executeQuery();
-				Butaca[] butacas = new Butaca[rs.getInt(3) * rs.getInt(4)];
-				int i=0;
-				while (rsb.next()) {
-					butacas[i]=new Butaca(rsb.getInt(1), rsb.getInt(2), rsb.getInt(3), rsb.getBoolean(4));
-				}
-				salas.add(new Sala(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4)));
-			}
-
+			salas.add(new Sala(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4)));
 		} catch (Exception e) {
 			System.out.println("Peta a la hora de extraer las salas de la base de datos");
 			System.out.println(e.toString());
-			// TODO: handle exception
 		}
 		/*
 		 * try { stmt = con.prepareStatement("SELECT * FROM BUTACAS"); ResultSet
@@ -225,15 +227,18 @@ public class BBDD {
 			Class.forName(eDriver).newInstance();
 			con = DriverManager.getConnection(eURL, "root", "");
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("Peta a la hora de borrar la BBDD");
+			System.out.println(e.toString());
+			e.printStackTrace();
 		}
+		
 
 		try {
 			stmt = con.prepareStatement("DELETE FROM PELICULAS");
 			stmt.executeUpdate();
 			stmt = con.prepareStatement("DELETE FROM BUTACAS");
 			stmt.executeUpdate();
-			stmt = con.prepareStatement("DELETE FROM rel_butacas_salas");
+			stmt = con.prepareStatement("DELETE FROM rel_butacas_sesiones");
 			stmt.executeUpdate();
 			stmt = con.prepareStatement("DELETE FROM SALAS");
 			stmt.executeUpdate();

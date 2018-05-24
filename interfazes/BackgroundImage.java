@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class BackgroundImageJFrame extends JFrame {
+class BackgroundImage extends JFrame {
 	JButton b1;
 	JLabel l1;
 
-	public BackgroundImageJFrame() {
+	public BackgroundImage() {
 		setTitle("Background Color for JFrame");
 		setSize(400, 400);
 		setLocationRelativeTo(null);
@@ -27,6 +27,9 @@ class BackgroundImageJFrame extends JFrame {
 		// Another way
 		setLayout(new BorderLayout());
 		setContentPane(new JLabel(new ImageIcon("C:\\Users\\Blanes-PC\\Documents\\MEGA\\1DAW\\PROGRAMACIÓN\\3EVALUACION\\jacki.jpg")));
+		setContentPane(new JLabel(new ImageIcon("C:\\Users\\Blanes-PC\\workspace\\Programación Repitiendo\\src\\abril18\\proyectoCine\\interfazes\\jackie.jpg")));
+		
+		
 		setLayout(new FlowLayout());
 		l1 = new JLabel("Here is a button");
 		b1 = new JButton("I am a button");
@@ -36,8 +39,9 @@ class BackgroundImageJFrame extends JFrame {
 		setSize(399, 399);
 		setSize(400, 400);
 	}
-
+/*
 	public static void main(String args[]) {
-		new BackgroundImageJFrame();
+		new BackgroundImage();
 	}
+	*/
 }
