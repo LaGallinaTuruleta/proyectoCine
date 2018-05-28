@@ -33,14 +33,10 @@ public class Interfas {
 	private JPanel panel2_sesiones;
 	private JPanel panel3_butacas;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-
 					Interfas window = new Interfas();
 					window.frame.setVisible(true);
 				} catch (Exception e) {

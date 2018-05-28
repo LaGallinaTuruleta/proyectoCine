@@ -4,24 +4,24 @@ import java.util.Arrays;
 
 public class Sala {
 	private int codSala;
-	private int tipoSala;
+	private String tipoSala;
 	private int filas;
-	private int numAsientosXFila;
+	private int asientosXFila;
 
 	public Sala() {
 		this.codSala = 0;
 		this.filas = 0;
-		this.numAsientosXFila = 0;
-		this.tipoSala = 0;
+		this.asientosXFila = 0;
+		this.tipoSala = "";
 
 	}
 
-	public Sala(int codSala, int tipoSala, int filas, int numAsientosXFila) {
+	public Sala(int codSala, String tipoSala, int filas, int numAsientosXFila) {
 		try {
 			this.codSala = codSala;
 			this.tipoSala = tipoSala;
 			this.filas = filas;
-			this.numAsientosXFila = numAsientosXFila;
+			this.asientosXFila = numAsientosXFila;
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -38,11 +38,11 @@ public class Sala {
 		this.codSala = codSala;
 	}
 
-	public int getTipoSala() {
+	public String getTipoSala() {
 		return tipoSala;
 	}
 
-	public void setTipoSala(int tipoSala) {
+	public void setTipoSala(String tipoSala) {
 		this.tipoSala = tipoSala;
 	}
 
@@ -53,7 +53,7 @@ public class Sala {
 	@Override
 	public String toString() {
 		return "Sala [codSala=" + codSala + ", tipoSala=" + tipoSala + ", filas=" + filas + ", numAsientosXFila="
-				+ numAsientosXFila + "]";
+				+ asientosXFila + "]";
 	}
 
 	public void setFilas(int filas) {
@@ -61,11 +61,11 @@ public class Sala {
 	}
 
 	public int getNumAsientosXFila() {
-		return numAsientosXFila;
+		return asientosXFila;
 	}
 
 	public void setNumAsientosXFila(int numAsientosXFila) {
-		this.numAsientosXFila = numAsientosXFila;
+		this.asientosXFila = numAsientosXFila;
 	}
 
 }

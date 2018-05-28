@@ -84,7 +84,7 @@ public class BBDD {
 			try {
 				stmt = con.prepareStatement("INSERT INTO SALAS VALUES(?,?,?,?)");
 				stmt.setInt(1, sala.getCodSala());
-				stmt.setInt(2, sala.getTipoSala());
+				stmt.setString(2, sala.getTipoSala());
 				stmt.setInt(3, sala.getFilas());
 				stmt.setInt(4, sala.getNumAsientosXFila());
 				stmt.executeUpdate();
@@ -159,26 +159,29 @@ public class BBDD {
 		try {
 			PreparedStatement stmtse = con.prepareStatement("SELECT * FROM SESIONES");
 			ResultSet rsse = stmtse.executeQuery();
-			
-			
+
 			//error llega al maximo
 			while (rsse.next()) {
-				PreparedStatement stmtsa = con.prepareStatement("SELECT * FROM rel_butacas_sesiones WHERE COD_SESION='"+rsse.getInt(1)+"%'")
-						ResultSet rssa = stmtsa.executeQuery();;
+				PreparedStatement stmtsa = con.prepareStatement(
+						"SELECT * FROM rel_butacas_sesiones WHERE COD_SESION='" + rsse.getInt(1) + "%'");
+				ResultSet rssa = stmtsa.executeQuery();
 				while (rssa.next()) {
 
-					PreparedStatement stmtbu = con.prepareStatement("SELECT * FROM BUTACAS WHERE COD_BUTACA ='" + rs.getInt(1) + "%'");
-					ResultSet rsb = stmt.executeQuery();
-					Butaca[] butacas = new Butaca[rs.getInt(3) * rs.getInt(4)];
+					PreparedStatement stmtbu = con
+							.prepareStatement("SELECT * FROM BUTACAS WHERE COD_BUTACA ='" + rssa.getInt(1) + "%'");
+					ResultSet rsb = stmtbu.executeQuery();
+					Butaca[] butacas = new Butaca[rsb.getInt(3) * rsb.getInt(4)];
 					int i = 0;
 					while (rsb.next()) {
 						butacas[i] = new Butaca(rsb.getInt(1), rsb.getInt(2), rsb.getInt(3), rsb.getBoolean(4));
 					}
-				
-				sesiones.add(new Sesion(rsse.getInt(1), rsse.getInt(2),
-						new Sala(rssa.getInt(1), rssa.getInt(2), rssa.getInt(3), rssa.getInt(4)), rsse.getString(4)));
-			}
 
+					sesiones.add(new Sesion(rsse.getInt(1), rsse.getInt(2),
+							new Sala(rssa.getInt(1), rssa.getString(2), rssa.getInt(3), rssa.getInt(4)),
+							rssa.getString(4)));
+				}
+
+			}
 		} catch (Exception e) {
 			System.out.println("Peta a la hora de extraer las sesiones de la base de datos");
 			System.out.println(e.toString());
@@ -200,7 +203,7 @@ public class BBDD {
 		try {
 			stmt = con.prepareStatement("SELECT * FROM SALAS");
 			ResultSet rs = stmt.executeQuery();
-			salas.add(new Sala(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4)));
+			salas.add(new Sala(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
 		} catch (Exception e) {
 			System.out.println("Peta a la hora de extraer las salas de la base de datos");
 			System.out.println(e.toString());
@@ -231,7 +234,6 @@ public class BBDD {
 			System.out.println(e.toString());
 			e.printStackTrace();
 		}
-		
 
 		try {
 			stmt = con.prepareStatement("DELETE FROM PELICULAS");
