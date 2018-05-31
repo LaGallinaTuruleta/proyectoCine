@@ -74,7 +74,7 @@ public class Interfas {
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 
 		panel1_peliculas = new JPanel();
-		frame.getContentPane().add(panel1_peliculas, "name_142425102264885");
+		frame.getContentPane().add(panel1_peliculas, "panel_peliculas");
 		panel1_peliculas.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel lblNewLabel = new JLabel();
